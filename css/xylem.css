@@ -1,6 +1,6 @@
 :root {
     /* For sections */
-    --vertical-padding-base : 3rem;
+    --vertical-padding-base : 5rem;
     --vpb : var(--vertical-padding-base); /* Because stuff writing the full thing out */
 
     /* Gutter is the horizontal gap along the side of the page, it's used to create a nice whitespace */
