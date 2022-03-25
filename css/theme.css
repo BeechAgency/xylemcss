@@ -1,0 +1,302 @@
+:root {
+    /* Colors */
+    --white : #ffffff;
+    --celeste: #bdfffdff;
+    --celeste-2: #9ffff5ff;
+    --aquamarine: #7cffc4ff;
+    --green-sheen: #6abea7ff;
+    --black-coral: #5e6973ff;
+    --black: #000000;
+
+    /* Fonts */
+    --ff-serif : 'Space Mono', monospace;
+    --ff-sans : 'DM Sans', sans-serif;
+    --ff-mono : 'Space Mono', monospace;
+    --ff-headings : var(--ff-mono) ;
+    --ff-body : var(--ff-sans);
+    --ff-highlight : var(--ff-mono);
+
+    /* Font Sizes */
+	--base-font-size : 18px;
+	--base-line-height : 1.3333;
+
+	--fs-s3 : 0.422rem;
+	--fs-s2 : 0.563rem;
+	--fs-s1 : 0.75rem;
+	--fs-s0 : 0.8rem;
+	--fs-base : 1rem;
+	--fs-h1 : 5.5556rem;  /* 100px */
+	--fs-h2 : 2.7778rem;  /* 50px */
+	--fs-h3 : 1.7rem;  
+	--fs-h4 : 1.7778rem;  /* 32px */
+	--fs-h5 : 1.3333rem;  /* 24px */
+	--fs-h6 : 1.1111rem;  /* 20px */
+
+	/* Default */
+	--body-text-color: var(--black-coral, #000000);
+	--body-bg-color: var(--white, #ffffff);
+}
+
+html {
+    font-family: var(--ff-body);
+    font-size: var(--base-font-size);
+    color: var(--body-text-color);
+}
+
+/* Type settings */
+h1,h2,h3,h4,h5,h6 { font-family: var(--ff-headings); margin: 0.5rem 0; }
+h1 {
+	font-size: var(--fs-h1);
+	line-height: 1;
+	font-weight: bold;
+}
+h2 {
+	font-size: var(--fs-h2);
+	line-height: 1;
+	font-weight: bold;
+}
+h3 {
+	font-size: var(--fs-h3);
+	font-weight: bold;
+	line-height: 1;
+}
+h4 { 
+	font-size: var(--fs-h4); 
+	line-height: 1.1;
+	font-weight: normal;
+}
+h5 { 
+	font-size: var(--fs-h5); 
+	font-weight: normal;
+	line-height: 1.4;
+}
+h6 { 
+	font-size: var(--fs-h6); 
+	font-weight: normal;
+	line-height: 1.1;
+}
+p { 
+	font-family: var(--ff-body);
+	font-size: var(--fs-base); 
+	line-height: var(--base-line-height);
+	font-weight: normal;
+}
+
+code {
+    font-family: var(--ff-mono);
+    font-weight: normal;
+    background-color: var(--celeste-2);
+    display: inline;
+    border-radius: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+small {
+    font-size: 0.65em;
+}
+
+/*
+ * Theming begins
+ */
+
+.has-celeste-background-color { background-color:  var(--celeste); }
+.has-celeste-2-background-color { background-color:  var(--celeste-2); }
+.has-aquamarine-background-color { background-color:  var(--aquamarine); }
+.has-green-sheen-background-color { background-color:  var(--green-sheen); }
+.has-black-coral-background-color { background-color:  var(--black-coral); }
+.has-white-background-color { background-color:  var(--white); }
+
+.has-celeste-color { color:  var(--celeste); }
+.has-celeste-2-color { color:  var(--celeste-2); }
+.has-aquamarine-color { color:  var(--aquamarine); }
+.has-green-sheen-color { color:  var(--green-sheen); }
+.has-black-coral-color { color:  var(--black-coral); }
+.has-white-color { color:  var(--white); }
+
+
+h1 {
+    color: var(--aquamarine);
+    text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
+    transition: all 150ms ease;
+}
+h1:hover {text-shadow: -3px -3px 0px rgba(94,105,115,0.9); }
+h2 {
+    text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
+   
+}
+h2:hover { 
+    animation: textShadowSwirl 250ms linear 0s 1 alternate forwards;
+}
+
+h3 > code {
+
+    font-size: 0.65em;
+    margin-top: 1rem;
+}
+
+code {
+    animation: backgroundColorSwirl 10s linear 0s infinite alternate forwards;
+}
+
+
+.borders .xy-col {
+
+    background-color: var(--celeste);
+    transition: all 150ms ease;
+}
+.borders .xy-row {
+    margin-bottom: 2rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    transition: all 150ms ease;
+}
+.borders .xy-row:hover {
+    background-color: var(--celeste);
+}
+.borders .xy-row:hover .xy-col {
+    background-color: var(--aquamarine);
+}
+.borders .xy-row .xy-col:hover {
+    background-color: var(--black-coral);
+    color: var(--white);
+}
+.borders .xy-col {
+    padding: calc(var(--gutter) / 8) calc(var(--gutter) / 4);
+}
+
+@keyframes textShadowSwirl {
+    0% {
+        text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
+    }
+    25% {
+        text-shadow: 6px 6px 0px var(--green-sheen);
+    }
+    50% {
+        text-shadow: 9px 9px 0px var(--aquamarine);
+    }   
+    75% {
+        text-shadow: 6px 6px 0px var(--green-sheen);
+    } 
+    100% {
+        text-shadow: 9px 9px 0px rgba(0, 0, 0, 0.5);
+    }    
+}
+
+@keyframes backgroundColorSwirl {
+    0% {
+        background-color: var(--celeste-2);
+    }
+    33% {
+        background-color: var(--celeste-1);
+    }
+    66% {
+        background-color: var(--aquamarine);
+    }   
+    100% {
+        background-color: var(--green-sheen);
+    } 
+}
+
+section.grid-overlay.hidden {
+    max-height: 0;
+}
+section.grid-overlay {
+    background-color: var(--black);
+}
+section.grid-overlay.hidden .xy-row {
+    max-height: 0vh;
+    background-color: var(--celeste-2);
+}
+
+section.grid-overlay.hidden .xy-row .xy-col {
+    background-color: var(--black-coral);
+}
+
+section.grid-overlay {
+    transition: all 150ms ease;
+
+    max-height: 100vh;
+    padding: 0;
+
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0.5;
+}
+
+.grid-overlay .xy-row {
+    max-height: 100vh;
+    height: 100%;
+    background-color: var(--black-coral);
+    transition: all 250ms ease;
+}
+.grid-overlay .xy-row .xy-col {
+    background-color: var(--celeste);
+    transition: all 550ms ease;
+}
+
+.button {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 5;
+
+    transition: all 150ms ease;
+}
+.button.overlay-toggle {
+    border-color: var(--green-sheen);
+    color: var(--green-sheen);
+}
+.button.overlay-toggle.active {
+    background-color: var(--celeste-2);
+    border-color: var(--celeste-2);
+    color: black;
+
+    box-shadow: 5px 5px 3px 0px rgba(0,0,0,0.4);
+}
+
+.button.overlay-toggle.active:hover {
+    box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.4);
+}
+.button.overlay-toggle:hover {
+    box-shadow: 0px 0px 15px 5px rgba(255,255,255,0.75);
+    background-color: white;
+}
+
+.xy-wrapper.input-group {
+    align-items: stretch;
+}
+.input-group {
+    max-width: 200px;
+    margin: 0 auto;
+}
+.input-group * {
+    width: 100%;
+}
+.input-group input {
+    min-height: 2rem;
+    background-color: transparent;
+    border: 0;
+    text-align: center;
+    font-size: var(--fs-h3);
+    margin-bottom: 0.5rem;
+    color: white;
+
+    font-family: var(--ff-mono);
+}
+.input-group button {
+    font-family: var(--ff-mono);
+    font-size: var(--fs-base);
+    color: var(--white);
+    border-color: transparent;
+    background-color: var(--black);
+    border-radius: 10px;
+}
+
+.circles .xy-col {
+    overflow: hidden;
+    border-radius: 100%;
+    height: 5rem;
+}

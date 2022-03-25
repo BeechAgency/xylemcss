@@ -1,0 +1,266 @@
+:root {
+    /* For sections */
+    --vertical-padding-base : 3rem;
+    --vpb : var(--vertical-padding-base); /* Because stuff writing the full thing out */
+
+    /* Gutter is the horizontal gap along the side of the page, it's used to create a nice whitespace */
+    --gutter : 5rem;
+    --gap : calc(var(--gutter) / 5);
+    --row-gap : var(--vpb);
+
+    /* Max widths */
+    --max-width : calc(1680px + var(--gutter));
+    --max-width-wide :  calc(1440px + var(--gutter));
+    --max-width-inner :  calc(1140px + var(--gutter));
+    --max-width-text :  calc(960px + var(--gutter));
+
+}
+
+* { box-sizing: border-box; }
+html, body { padding: 0; margin: 0; border: 0; }
+
+
+/* Sections break content up, it is the outermost element */
+section {
+    display: block;
+    margin: 0 auto;
+    padding: var(--vpb) 0;
+}
+
+/*
+ * Structure and Grid
+ */
+/* A container's job is to contain things - so gutter and max width and positining */
+.xy-container {
+    max-width: var(--max-width);
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+    display: block;
+}
+.xy-container.xy-mw-wide { max-width: var(--max-width-wide); }
+.xy-container.xy-mw-inner { max-width: var(--max-width-inner); }
+.xy-container.xy-mw-text { max-width: var(--max-width-text); }
+
+.xy-container + .xy-container {
+    margin-top: var(--vpb);
+}
+
+/* A rows job is to be a wrapper for the row of items, it puts stuff on a grid */
+.xy-row { 
+    width: 100%;
+
+    --cols : 12;
+    --rows : 1;
+
+    row-gap: var(--row-gap);
+    column-gap: var(--gap);
+
+    grid-template-columns: repeat(var(--cols, 12), 1fr);
+    grid-template-rows: repeat(var(--rows, 1), 1fr);
+
+    display: grid; 
+    grid-auto-flow: row;
+
+    justify-items: stretch;
+    align-items: stretch;
+    justify-content: stretch;
+    align-content: stretch;   
+}
+/* 
+    You can set your own columns if you are vibing it. 
+    4 is probably the most you want to go unless you are using the full responsive 12 grid.
+*/
+.xy-cols-1 { --cols: 1; }
+.xy-cols-2 { --cols: 2; }
+.xy-cols-3 { --cols: 3; }
+.xy-cols-4 { --cols: 4; }
+/*
+.xy-cols-5 { --cols: 5; }
+.xy-cols-6 { --cols: 6; }
+.xy-cols-7 { --cols: 7; }
+.xy-cols-8 { --cols: 8; }
+.xy-cols-9 { --cols: 9; }
+.xy-cols-10 { --cols: 10; }
+.xy-cols-11 { --cols: 11; }
+.xy-cols-12 { --cols: 12; }*/
+
+/* Make sure rows are not smushed */
+.xy-row + .xy-row {
+    margin-top: var(--vpb);
+}
+
+/* Art of the xy-col and positioning */
+.xy-start-1 { grid-column-start : 1; }
+.xy-start-2 { grid-column-start : 2; }
+.xy-start-3 { grid-column-start : 3; }
+.xy-start-4 { grid-column-start : 4; }
+.xy-start-5 { grid-column-start : 5; }
+.xy-start-6 { grid-column-start : 6; }
+.xy-start-7 { grid-column-start : 7; }
+.xy-start-8 { grid-column-start : 8; }
+.xy-start-9 { grid-column-start : 9; }
+.xy-start-10 { grid-column-start : 10; }
+.xy-start-11 { grid-column-start : 11; }
+.xy-start-12 { grid-column-start : 12; }
+
+
+.xy-col { --col : 1; --row : auto; --start: auto; grid-column: var(--start) / span var(--col); grid-row: var(--row); }
+.xy-col-2 { --col: 2; --row : auto; --start: auto; grid-column: var(--start) / span var(--col); grid-row: var(--row); }
+.xy-col-3 { --col: 3; --row : auto; --start: auto; grid-column: var(--start) / span var(--col); grid-row: var(--row); }
+.xy-col-4 { --col: 4; --row : auto; --start: auto; grid-column: var(--start) / span var(--col); grid-row: var(--row); }
+.xy-col-5 { --col: 5; --row : auto; --start: auto; grid-column: var(--start) / span var(--col); grid-row: var(--row); }
+.xy-col-6 { --col: 6; --row : auto; --start: auto; grid-column: var(--start) / span var(--col); grid-row: var(--row); }
+.xy-col-7 { --col: 7; --row : auto; --start: auto; grid-column: var(--start) / span var(--col); grid-row: var(--row); }
+.xy-col-8 { --col: 8; --row : auto; --start: auto; grid-column: var(--start) / span var(--col); grid-row: var(--row); }
+.xy-col-9 { --col: 9; --row : auto; --start: auto; grid-column: var(--start) / span var(--col); grid-row: var(--row); }
+.xy-col-10 { --col: 10; --row : auto; --start: auto; grid-column: var(--start) / span var(--col); grid-row: var(--row); }
+.xy-col-11 { --col: 11; --row : auto; --start: auto; grid-column: var(--start) / span var(--col); grid-row: var(--row); }
+.xy-col-12 { --col: 12; --row : auto; --start: auto; grid-column: var(--start) / span var(--col); grid-row: var(--row); }
+.xy-col-a { --col : auto; --row : auto; --start: auto; grid-column: var(--start) / span var(--col); grid-row: var(--row); }
+
+/*
+ * Wrapper
+ */
+.xy-wrapper {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+}
+.xy-wrapper.v-center > .text-center {
+    width: 100%;
+}
+.xy-wrapper.v-center {
+
+    justify-content: center;
+    height: 100%;
+}
+
+.xy-wrapper.img img {
+    max-width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.xy-wrapper.img-cover {
+    align-items: stretch;
+}
+.xy-wrapper.img-cover img {
+    max-width: 100%;
+    display: block;
+
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+.xy-wrapper.xy-flex-row {
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+/*
+ * Utilities
+ */
+ .text-center { text-align: center; }
+ .text-left { text-align: left; }
+ .text-right { text-align: right; }
+
+.xy-vpb {
+    padding-top: var(--vpb);
+    padding-bottom: var(--vpb)
+}
+.xy-vpb-1\/2 {
+    padding-top: calc(var(--vpb) / 2);
+    padding-bottom: calc(var(--vpb) / 2);
+}
+.xy-vpb-1\/4 {
+    padding-top: calc(var(--vpb) / 4);
+    padding-bottom: calc(var(--vpb) / 4);
+}
+.xy-gutter {
+    padding-left: var(--gutter);
+    padding-right: var(--gutter);
+}
+.xy-container.xy-no-gutter, .xy-no-gutter {
+    padding-left: 0;
+    padding-right: 0;
+}
+.xy-container.xy-no-gutter-right > :first-child {
+    padding-left: var(--gutter);
+}
+.xy-container.xy-no-gutter-right {
+    padding: 0;
+}
+.xy-container.xy-no-gutter-left > :last-child {
+    padding-right: var(--gutter);
+}
+.xy-container.xy-no-gutter-left {
+    padding: 0;
+}
+
+button {
+    border: 1px solid var(--black, black);
+    padding: 0.5rem 1rem;
+
+    background-color: transparent;
+    text-transform: uppercase;
+}
+
+
+/* 
+ * Responsiveness 
+ */
+
+
+/* Small desks - lg */
+@media screen and (max-width: 1180px) {
+    :root { --gutter : 2rem; }
+}
+
+/* Tabs - md */
+@media screen and (max-width: 768px) {
+    :root { --gutter : 1.5rem; }
+    
+    .xy-row:not(.xy-cols-1, .xy-cols-2, .xy-cols-3, .xy-cols-4) { --cols : 8; }
+
+    .xy-md-col-2 { --col: 2; }
+    .xy-md-col-3 { --col: 3; }
+    .xy-md-col-4 { --col: 4; }
+    .xy-md-col-5 { --col: 5; }
+    .xy-md-col-6 { --col: 6; }
+    .xy-md-col-7 { --col: 7; }
+    .xy-md-col-8 { --col: 8; }
+    
+    .xy-md-col-row-1 { --row: 1; }
+    .xy-md-col-row-2 { --row: 2; }
+    .xy-md-col-row-3 { --row: 3; }
+
+    /*
+    :not(.xy-cols-1, .xy-cols-2, .xy-cols-3, .xy-cols-4) .xy-col-2 { --col: 3; }
+    :not(.xy-cols-1, .xy-cols-2, .xy-cols-3, .xy-cols-4) .xy-col-3 { --col: 2; }
+    :not(.xy-cols-1, .xy-cols-2, .xy-cols-3, .xy-cols-4) .xy-col-4 { --col: 2; }
+    :not(.xy-cols-1, .xy-cols-2, .xy-cols-3, .xy-cols-4) .xy-col-5 { --col: 4; }
+    :not(.xy-cols-1, .xy-cols-2, .xy-cols-3, .xy-cols-4) .xy-col-6 { --col: 4; }
+    :not(.xy-cols-1, .xy-cols-2, .xy-cols-3, .xy-cols-4) .xy-col-7 { --col: 6; }
+    :not(.xy-cols-1, .xy-cols-2, .xy-cols-3, .xy-cols-4) .xy-col-8 { --col: 6; }
+    :not(.xy-cols-1, .xy-cols-2, .xy-cols-3, .xy-cols-4) .xy-col-9 { --col: 6; }
+    :not(.xy-cols-1, .xy-cols-2, .xy-cols-3, .xy-cols-4) .xy-col-10 { --col: 8; }
+    :not(.xy-cols-1, .xy-cols-2, .xy-cols-3, .xy-cols-4) .xy-col-11 { --col: 8; }
+    :not(.xy-cols-1, .xy-cols-2, .xy-cols-3, .xy-cols-4) .xy-col-12 { --col: 8; }
+    */
+}
+/* Mobs - sm */
+@media screen and (max-width: 576px) {
+    :root { --gutter : 1rem; }
+    .xy-row:not(.xy-cols-1, .xy-cols-2, .xy-cols-3, .xy-cols-4) { --cols : 4; }
+
+    .xy-sm-col-2 { grid-column: auto / span 2; }
+    .xy-sm-col-3 { grid-column: auto / span 3; }
+    .xy-sm-col-4 { grid-column: auto / span 4; }
+
+    .xy-sm-col-row-2 { --row: 2; }
+    .xy-sm-col-row-3 { --row: 3; }
+}
+
