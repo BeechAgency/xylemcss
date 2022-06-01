@@ -18,12 +18,18 @@
 
 * { box-sizing: border-box; }
 html, body { padding: 0; margin: 0; border: 0; }
+html {
+    scroll-behavior: smooth;
+}
 
 
 /* Sections break content up, it is the outermost element */
 section {
     display: block;
     margin: 0 auto;
+    padding: var(--vpb) 0;
+}
+.vpd {
     padding: var(--vpb) 0;
 }
 
@@ -199,6 +205,9 @@ section {
 .xy-container.xy-no-gutter-left {
     padding: 0;
 }
+.xy-vh-100 {
+    min-height: 100vh;
+}
 
 button {
     border: 1px solid var(--black, black);
@@ -264,3 +273,69 @@ button {
     .xy-sm-col-row-3 { --row: 3; }
 }
 
+
+
+.Prose {
+    display: grid;
+    --cols : 12;
+    gap: var(--gap);
+    grid-template-columns: 
+        [full-start] calc(50vw - calc(var(--max-width) / 2) + var(--gutter) - var(--gap)) 
+        [main-start] repeat(var(--cols, 12), 1fr) [main-end]
+        calc(50vw - calc(var(--max-width) / 2) + var(--gutter) - var(--gap)) [full-end]; 
+}
+
+.layout {
+    display: grid;
+    grid-template-columns:
+      calc( 50vw - 36rem )
+      repeat( 8, 1fr )
+      calc( 50vw - 36rem );
+  }
+
+.Prose > *, .Prose-8 > *  {
+    grid-column: 2 / span 12;
+    grid-column: main;
+}
+.Prose-splash {
+    grid-column: full;
+}
+
+/* Calcs */
+.Prose-8 {
+    display: grid;
+    --cols : 8;
+    --root-cols : 12;
+    --standard-side-width : calc(50vw - calc(var(--max-width) / 2) + var(--gutter) - var(--gap));
+    --column-gap-addition : calc( var(--gap) * 11 / 12 );
+    --column-width : calc( (var(--max-width) - var(--gutter)) / 12 - var(--column-gap-addition) );
+    --side-width-addition : calc( (var(--root-cols) - var(--cols)) / 2 * var(--column-width) );
+
+    --modified-side-width : calc(var(--standard-side-width) + var(--side-width-addition) + (var(--gap) * var(--root-cols) / var(--cols) ) );
+
+    gap: var(--gap);
+    grid-template-columns: 
+        [full-start] var(--modified-side-width) 
+        [main-start] repeat(var(--cols, 12), 1fr) [main-end]
+        var(--modified-side-width) [full-end]; 
+}
+
+/*
+.Prose2 {
+    display: grid;
+    grid-template-columns: 
+        [full-start] minmax(1em, 1fr) 
+        [main-start] minmax(0, var(--max-width)) [main-end]
+        minmax(1em, 1fr) [full-end];
+}
+.Prose > * {
+    grid-column: main;
+}
+.Prose-splash {
+    grid-column: full;
+}
+.Prose-splash {
+    grid-column: full-start / span main-end;
+} */
+/*grid-template-columns: repeat(var(--cols, 12), 1fr);*/
+/* https://cloudfour.com/thinks/breaking-out-with-css-grid-layout/ */

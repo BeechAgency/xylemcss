@@ -95,6 +95,10 @@ small {
     font-size: 0.65em;
 }
 
+h1.clamp {
+    font-size: clamp( var(--fs-h4), 1rem + 30vw, var(--fs-h1) );
+}
+
 /*
  * Theming begins
  */
