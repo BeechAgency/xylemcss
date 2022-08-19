@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+        <link href="css/theme.css" rel="stylesheet" />
+        <link href="css/xylem.v1.css" rel="stylesheet" />
+    </head>
+    <body>
+        <section class="has-celeste-background-color">
+            <div class="xy-container xy-mw-text">
+                <h1>XYLEM GRID CSS</h1>
+                <p>Simple grid framework for people that don't want to write one for every project.</p>
+            </div>
+        </section>
+        <section class="has-aquamarine-background-color">
+            <div class="xy-grid">
+                <div class="xy-col has-white-background-color">1</div>
+                <div class="xy-col has-white-background-color">2</div>
+                <div class="xy-col has-white-background-color">3</div>
+                <div class="xy-col has-white-background-color">4</div>
+                <div class="xy-col has-white-background-color">5</div>
+                <div class="xy-col has-white-background-color">6</div>
+                <div class="xy-col has-white-background-color">7</div>
+                <div class="xy-col has-white-background-color">8</div>
+                <div class="xy-col has-white-background-color">9</div>
+                <div class="xy-col has-white-background-color">10</div>
+                <div class="xy-col has-white-background-color">11</div>
+                <div class="xy-col has-white-background-color">12</div>
+            </div>
+            <div class="xy-grid">
+                <div class="xy-col has-white-background-color" data-xy-col="6">Span 6</div>
+                <div class="xy-col has-white-background-color" data-xy-col="3">Span 3</div>
+                <div class="xy-col has-white-background-color" data-xy-col="3">Span 3</div>
+            </div>
+            <div class="xy-grid">
+                <div class="xy-col has-celeste-background-color" data-xy-col="6" data-xy-start="7">Span 6, Start 7</div>
+            </div>
+            <div class="xy-grid">
+                <div class="xy-col has-celeste-background-color" data-xy-col="6" data-xy-start="7" data-xy-row="1">Span 6, Start 7</div>
+                <div class="xy-col has-black-coral-background-color has-white-color" data-xy-col="8" data-xy-start="1" data-xy-row="1">Overlapping!</div>
+            </div>
+        </section>
+
+        <section class="has-black-coral-background-color">
+            <div class="xy-grid">
+                <div class="xy-col" data-xy-col="6" data-xy-start="auto" data-xy-row="1">
+                    <h2 class=" has-celeste-color">Responsive grid!</h2>
+                </div>
+                <div class="xy-col has-celeste-background-color" data-xy-col="xl-6 lg-9 md-8 sm-10" data-xy-start="auto" data-xy-row="xl-2">
+                    <h3 class="">Responsive grid! Left</h3>
+                </div>
+                <div class="xy-col has-celeste-background-color" data-xy-col="xl-6 lg-3 md-4 sm-10" data-xy-start="" data-xy-row="xl-2 md-3">
+                    <h3 class="">Righty right!</h3>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="has-aquamarine-background-color">
+            <div class="xy-container xy-grid">
+                <div class="xy-col" data-xy-col="6" data-xy-start="auto" data-xy-row="1">
+                    <h2 class="">An actual example</h2>
+                </div>
+                <div class="xy-col has-celeste-background-color" data-xy-col="xl-6 lg-9 md-8 sm-10" data-xy-start="auto" data-xy-row="xl-2">
+                    <h3 class="">Some rad title</h3>
+                    <p>Sed sapien velit, laoreet non elit nec, mattis aliquam ante. Integer ornare tellus metus, eu consequat nibh suscipit vel. Maecenas dapibus sagittis mi non accumsan. Etiam varius odio sed orci vulputate, vel lacinia sapien egestas.</p>
+                    <p>Phasellus vitae nulla eu lacus pulvinar elementum.</p>
+                </div>
+                <div class="xy-col " data-xy-col="xl-6 lg-3 md-4 sm-10" data-xy-start="" data-xy-row="xl-2 md-3">
+                    <img src="https://placebear.com/1200/1200" class="responsive-img" />
+                </div>
+            </div>
+            <div class="xy-container xy-grid">
+                <div class="xy-col " data-xy-col="xl-6 lg-3 md-4 sm-10" data-xy-row="xl-2 md-3">
+                    <img src="https://placebear.com/1200/600" class="responsive-img" />
+                </div>
+                <div class="xy-col has-celeste-background-color" data-xy-col="xl-6 lg-9 md-8 sm-10" data-xy-start="auto" data-xy-row="xl-2">
+                    <h3 class="">Another rad title</h3>
+                    <p>Sed sapien velit, laoreet non elit nec, mattis aliquam ante. Integer ornare tellus metus, eu consequat nibh suscipit vel. Maecenas dapibus sagittis mi non accumsan. Etiam varius odio sed orci vulputate, vel lacinia sapien egestas.</p>
+                    <p>Phasellus vitae nulla eu lacus pulvinar elementum.</p>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="has-aquamarine-background-color">
+            <div class="xy-container xy-flex" data-xy-items="align-center justify-start">
+                <div class="xy-col" data-xy-col="6" data-xy-start="auto" data-xy-row="1">
+                    <h2 class="">An actual example but with flex</h2>
+                </div>
+                <div class="xy-col has-celeste-background-color" data-xy-col="xl-6 lg-9 md-8 sm-10" data-xy-start="auto" data-xy-row="xl-2">
+                    <h3 class="">Some rad title</h3>
+                    <p>Sed sapien velit, laoreet non elit nec, mattis aliquam ante. Integer ornare tellus metus, eu consequat nibh suscipit vel. Maecenas dapibus sagittis mi non accumsan. Etiam varius odio sed orci vulputate, vel lacinia sapien egestas.</p>
+                    <p>Phasellus vitae nulla eu lacus pulvinar elementum.</p>
+                </div>
+                <div class="xy-col " data-xy-col="xl-6 lg-3 md-4 sm-10" data-xy-start="" data-xy-row="xl-2 md-3">
+                    <img src="https://placebear.com/1200/1200" class="responsive-img" />
+                </div>
+            </div>
+            <div class="xy-container xy-flex">
+                <div class="xy-col " data-xy-col="xl-6 lg-3 md-4 sm-10" data-xy-row="xl-2 md-3">
+                    <img src="https://placebear.com/1200/600" class="responsive-img" />
+                </div>
+                <div class="xy-col has-celeste-background-color" data-xy-col="xl-6 lg-9 md-8 sm-10" data-xy-start="auto" data-xy-row="xl-2">
+                    <h3 class="">Another rad title</h3>
+                    <p>Sed sapien velit, laoreet non elit nec, mattis aliquam ante. Integer ornare tellus metus, eu consequat nibh suscipit vel. Maecenas dapibus sagittis mi non accumsan. Etiam varius odio sed orci vulputate, vel lacinia sapien egestas.</p>
+                    <p>Phasellus vitae nulla eu lacus pulvinar elementum.</p>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="show-grid" class="grid-overlay hidden">
+            <div class="xy-grid">
+                <div class="xy-col"></div>
+                <div class="xy-col"></div>
+                <div class="xy-col"></div>
+                <div class="xy-col"></div>
+                <div class="xy-col"></div>
+                <div class="xy-col"></div>
+                <div class="xy-col"></div>
+                <div class="xy-col"></div>
+                <div class="xy-col"></div>
+                <div class="xy-col"></div>
+                <div class="xy-col"></div>
+                <div class="xy-col"></div>
+            </div>
+        </section>
+        <button class="button overlay-toggle hidden" id="toggle" onclick="toggleOverlay()" >
+            Overlay
+        </button>
+
+        <script type="text/javascript">
+
+            const toggleOverlay = () => {
+                const overlay = document.querySelector('#show-grid');
+                const btn = document.querySelector('#toggle');
+
+                let display = overlay.style.display;
+
+                if(overlay.classList.contains('hidden')) {
+                    btn.classList.add('active');
+                    overlay.classList.remove('hidden');
+
+                } else {
+                    btn.classList.remove('active');
+                    overlay.classList.add('hidden');
+                }
+            }
+
+            const toggleCSSVariable = (item) => {
+                const targetVar = item.getAttribute('for');
+
+                const valueEl = document.querySelector('input[name="'+targetVar+'"]');
+                const value = valueEl.value;
+
+                document.documentElement.style.setProperty(targetVar, value);
+            }
+
+
+
+        </script>
+    </body>
+</html>

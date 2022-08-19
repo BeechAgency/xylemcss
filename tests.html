@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+        <link href="css/theme.css" rel="stylesheet" />
+        <link href="css/xylem.css" rel="stylesheet" />
+        <style type="text/css">
+            .param-row {
+                display: flex;
+                align-items: center;
+                align-content: center;
+                justify-content: space-between;
+                flex-wrap: nowrap;
+                flex-direction: row;
+                gap: 1rem;
+                max-width: 320px;
+            }
+            .param-row.header { font-weight: bold; }
+        </style>
+    </head>
+    <body>
+        <h2>Hi!</h2>
+        <div id="output" class="results-output" style="background-color: var(--aquamarine); padding: 25px;">
+            <h4>Results</h4>
+            <h5 id="counter"></h5>
+            <img src="https://uploads-ssl.webflow.com/62ccc7bc4277a72c1bf1f874/62d7a1403632836a5ce3d508_oval-loader.svg" id="output-loader" style="display:none;" />
+        </div>
+        <button onclick="doTheThing()">Go</button>
+        <button onClick="localStorageClearHFF()">Reset</button>
+        <button id="toggle">Togs</button>
+        <div>
+          <canvas id="chart" width="600" height="300"></div>
+        </div>
+
+        <script type="text/javascript">
+            async function makeRequest( page = 0, since = null ) {
+
+                const counterEl = document.querySelector('#counter');
+
+                const config = { method : 'GET', headers: { "Accept": "application/json" } }
+
+                let params = '';
+
+                if(page > 0 && !since) {
+                    params = `?page=${page}`;
+                } else if(page > 0 && since !== null ) {
+                    params = `?page=${page}&since=${since}`;
+                } else if(since !== null) {
+                    params = `?since=${since}`;
+                }
+
+                const data = await fetch(`https://api.fightfamine.com.au/.netlify/functions/get_results_on_day${ params }`, config)
+                            .then(response =>  response.json() )
+                            .then(data => {
+
+                                console.log(data);
+
+                                const totalCount = data.request.count;
+                                let = nextDisplay = data.request.hasOwnProperty('next') ? data.request.next : 1;
+                                const totalPages = Math.ceil( totalCount / 100 );
+
+                                counterEl.innerHTML = `Fetching: ${nextDisplay} / ${totalPages}`;
+
+                                return data.request;
+                            });
+                            
+                console.log('makeRequest: page: ', page, data);
+                return data;
+            }
+
+            async function chainRequests(response = {}, since) {
+                if(!response.next) response.next = 0;
+                if(!response.pages) response.pages = [];
+
+                response_page = await makeRequest(response.next, since);
+
+                response.pages.push(response_page);
+                response.next = response_page.next;
+
+                if(response.next > 0) return chainRequests(response, since);
+
+                return response;
+
+            }
+            
+            function processFinalData( response ) {
+                if(response.pages.length === 0) return false;
+
+                const output = {};
+                output.dates = [];
+                output.dateTotals = [];
+                output.totals = {};
+
+                response.pages.forEach( item => {
+                    output.count = item.count;
+
+                    item.data.forEach( point => {
+                        if(output.dates.includes(point.date)) {
+
+                            output.dateTotals.forEach( dateItem => {
+                                if(dateItem.date !== point.date) return;
+
+                                dateItem.results = combineDateResponses(dateItem.results, point.results);
+                                dateItem.total = dateItem.total + point.total;
+                            });
+
+                        } else {
+                            output.dates.push(point.date);
+                            output.dateTotals.push(point);
+                        }
+
+                        output.totals = combineDateResponses(output.totals, point.results);
+                    });
+                });
+
+                return output;
+            }
+
+
+            function combineDateResponses(res1, res2) {
+                // Merge res2 into res1
+                for( const prop in res2 ) {
+                    if( res1.hasOwnProperty(prop) ) {
+                        res1[prop] = res1[prop] + res2[prop];
+                    } else {
+                        res1[prop] = res2[prop];
+                    }
+                }
+                return res1;
+            }
+
+            async function doTheThing( ) {
+
+                const loader = document.getElementById('output-loader');
+                loader.style.display = 'block';
+
+                // Check local storage.
+                const previous = localStorage.getItem('hff');
+
+                let previous_json = {};
+
+                let since = null;
+                const today = new Date();
+
+                if(previous !== null ) {
+                    previous_json = JSON.parse(previous);
+                    since = getSince(previous_json);
+
+                    let sinceDate = new Date(since);
+
+                    console.log('Since!: ', since);
+
+                    //if( sameDay(sinceDate, today) ) {
+                    since = getPreviousDay(sinceDate);
+                    //}
+
+
+                    console.log('Previous data: ', previous_json, JSON.stringify(previous_json) );
+
+                    // Remove entries from previous days otherwise they add up.
+                    previous_json = preparePreviousData(previous_json, since);
+                }
+
+                //console.log('Prepared Previous data: ', previous_json, JSON.stringify(previous_json));
+                
+                const response = await chainRequests(previous_json, since);
+
+                console.log('Response data: ', response, JSON.stringify(response));
+
+
+                localStorage.setItem('hff', JSON.stringify(response));
+
+                const data = processFinalData(response);
+
+
+                localStorage.setItem('hff_table', JSON.stringify(data));
+                console.log('Final data: ', data, JSON.stringify(data));
+
+                fillTable(data);
+                
+            }
+
+            function getSince( response ) {
+                if(!response.pages) return null;
+
+                let mostRecent = false;
+
+                response.pages.forEach(item => {
+                    //console.log(item);
+                    item.data.forEach( data => {
+                        //console.log(data.date);
+                        if(!mostRecent) return mostRecent = data.date;
+
+                        const d1 = new Date(mostRecent);
+                        const d2 = new Date(data.date);
+
+                        if(d1.getTime() < d2.getTime()) return mostRecent = data.date;
+
+                        return;
+                    } );
+                });
+
+                return mostRecent;
+            }
+
+            function preparePreviousData( previous_json, since ) {
+
+                const new_json = {};
+                new_json.next = previous_json.next;
+                new_json.pages = [];
+
+                previous_json.pages.forEach( page => {
+                    //console.log('--PAGE--',page);
+
+                    const newItem = {};
+                    newItem.count = page.count;
+                    newItem.next = page.next;
+                    newItem.data = [];
+
+
+                    page.data.forEach( (item, index) => {
+                        const date = item.date;
+
+                        const thisDate = new Date(date);
+                        const sinceDate = new Date(since);
+
+                        if( sameDay( thisDate, sinceDate ) ) return console.log('Same!', index, item);
+                        if( thisDate.getTime() > sinceDate.getTime() ) return console.log('Future!',  index, item);
+
+                        newItem.data.push(item);
+                    });
+
+                    new_json.pages.push(newItem);
+                });
+
+                console.log(previous_json, new_json);
+                
+
+
+                return new_json;
+            }
+
+            function sameDay(d1, d2) {
+                return d1.getFullYear() === d2.getFullYear() &&
+                    d1.getMonth() === d2.getMonth() &&
+                    d1.getDate() === d2.getDate();
+            }
+
+
+            function getPreviousDay(today = new Date()) {
+                const date = new Date(today.getTime());
+
+                //console.log(today, date, today.getDate(), today.getDate() - 1);
+
+                date.setDate(today.getDate() - 1);
+
+                //console.log(today, date, date.getMonth());
+
+                let monthRaw = date.getMonth() + 1;
+
+                const month = monthRaw < 9 ? '0'+monthRaw : monthRaw;
+                const day = date.getDate() < 9 ? '0'+date.getDate() : date.getDate();
+
+                return `${date.getFullYear()}-${month}-${day}`;
+            }
+            
+            function getNextDay(today = new Date()) {
+                const date = new Date(today.getTime());
+
+                console.log(today, date, today.getDate(), today.getDate() + 1);
+
+                date.setDate(today.getDate() + 1);
+
+                console.log(today, date, date.getMonth());
+
+                let monthRaw = date.getMonth() + 1;
+
+                const month = monthRaw < 9 ? '0'+monthRaw : monthRaw;
+                const day = date.getDate() < 9 ? '0'+date.getDate() : date.getDate();
+
+                return `${date.getFullYear()}-${month}-${day}`;
+            }
+
+            
+            function fillTable( data ) {
+                const el = document.getElementById('output');
+                console.log(data, JSON.stringify(data));
+
+                let output = '<div><div class="param-row header"><div class="param-key">Code</div><div class="param-result">Responses</div></div>';
+                let outputTotal = 0;
+
+                for (let [key, value] of Object.entries( data.totals )  ) { 
+                    //output += '<div class="param-group '+key+'"><span>'+key+'</span>';
+                    output += '<div class="param-row '+key+'"><div class="param-key">'+key+'</div><div class="param-result">'+value+'</div></div>';
+                    output += '</div>';
+
+                    outputTotal += Number(value);
+                } 
+
+                output += '</div>';
+
+                
+                el.innerHTML = '<h2>Total: '+outputTotal+'</h2>'+output;
+            }
+
+            function localStorageClearHFF() {
+                localStorage.removeItem('hff');
+                localStorage.removeItem('hff_table');
+
+                document.querySelector('#output').innerHTML = '';
+            }
+
+            const testData = {
+  "next": 0,
+  "pages": [
+    {
+      "data": [
+        {
+          "date": "2022-07-19",
+          "results": {
+            "": 1
+          },
+          "total": 1
+        },
+        {
+          "date": "2022-07-20",
+          "results": {
+            "micah": 3,
+            "plan": 61,
+            "baptist-world-aid": 1,
+            "": 2,
+            "cbm": 31,
+            "caritas_embedded": 1
+          },
+          "total": 99
+        }
+      ],
+      "count": 481,
+      "next": "2"
+    },
+    {
+      "data": [
+        {
+          "date": "2022-07-20",
+          "results": {
+            "cbm": 30,
+            "plan": 65,
+            "micah": 1,
+            "": 3,
+            "baptist-world-aid_embedded": 1
+          },
+          "total": 100
+        }
+      ],
+      "count": 481,
+      "next": "3"
+    },
+    {
+      "data": [
+        {
+          "date": "2022-07-20",
+          "results": {
+            "plan": 5,
+            "cbm": 6,
+            "baptist-world-aid_embedded": 1
+          },
+          "total": 12
+        },
+        {
+          "date": "2022-07-21",
+          "results": {
+            "plan": 31,
+            "cbm": 12,
+            "act-for-peace": 1,
+            "baptist-world-aid": 1,
+            "baptist-world-aid_embedded": 1,
+            "tearfund_embedded": 1
+          },
+          "total": 47
+        },
+        {
+          "date": "2022-07-22",
+          "results": {
+            "plan": 3,
+            "caritas_embedded": 1,
+            "oxfam": 37
+          },
+          "total": 41
+        }
+      ],
+      "count": 481,
+      "next": "4"
+    },
+    {
+      "data": [
+        {
+          "date": "2022-07-22",
+          "results": {
+            "oxfam": 92,
+            "baptist-world-aid": 3,
+            "cbm": 2,
+            "save-the-children": 1,
+            "caritas_embedded": 1,
+            "baptist-world-aid_embedded": 1
+          },
+          "total": 100
+        }
+      ],
+      "count": 481,
+      "next": "5"
+    },
+    {
+      "data": [
+        {
+          "date": "2022-07-22",
+          "results": {
+            "oxfam": 1
+          },
+          "total": 1
+        },
+        {
+          "date": "2022-07-23",
+          "results": {
+            "oxfam": 38,
+            "cbm": 3,
+            "baptist-world-aid": 5,
+            "plan": 2
+          },
+          "total": 48
+        },
+        {
+          "date": "2022-07-24",
+          "results": {
+            "oxfam": 15,
+            "plan": 5,
+            "": 3,
+            "cbm": 2,
+            "plan_embedded": 1,
+            "baptist-world-aid": 1
+          },
+          "total": 27
+        },
+        {
+          "date": "2022-07-25",
+          "results": {
+            "oxfam": 3,
+            "cbm": 2
+          },
+          "total": 5
+        }
+      ],
+      "count": 481,
+      "next": 0
+    }
+  ]
+}
+
+
+            const dataInitial = {"next":0,"pages":[{"data":[{"date":"2022-07-19","results":{"":1},"total":1},{"date":"2022-07-20","results":{"micah":3,"plan":61,"baptist-world-aid":1,"":2,"cbm":31,"caritas_embedded":1},"total":99}],"count":485,"next":"2"},{"data":[{"date":"2022-07-20","results":{"cbm":30,"plan":65,"micah":1,"":3,"baptist-world-aid_embedded":1},"total":100}],"count":485,"next":"3"},{"data":[{"date":"2022-07-20","results":{"plan":5,"cbm":6,"baptist-world-aid_embedded":1},"total":12},{"date":"2022-07-21","results":{"plan":31,"cbm":12,"act-for-peace":1,"baptist-world-aid":1,"baptist-world-aid_embedded":1,"tearfund_embedded":1},"total":47},{"date":"2022-07-22","results":{"plan":3,"caritas_embedded":1,"oxfam":37},"total":41}],"count":485,"next":"4"},{"data":[{"date":"2022-07-22","results":{"oxfam":92,"baptist-world-aid":3,"cbm":2,"save-the-children":1,"caritas_embedded":1,"baptist-world-aid_embedded":1},"total":100}],"count":485,"next":"5"},{"data":[{"date":"2022-07-22","results":{"oxfam":1},"total":1},{"date":"2022-07-23","results":{"oxfam":38,"cbm":3,"baptist-world-aid":5,"plan":2},"total":48},{"date":"2022-07-24","results":{"oxfam":15,"plan":5,"":3,"cbm":2,"plan_embedded":1,"baptist-world-aid":1},"total":27},{"date":"2022-07-25","results":{"oxfam":6,"cbm":2,"plan":1},"total":9}],"count":485,"next":0}]}
+            const dataInitialTotal = {"dates":["2022-07-19","2022-07-20","2022-07-21","2022-07-22","2022-07-23","2022-07-24","2022-07-25"],"dateTotals":[{"date":"2022-07-19","results":{"":1},"total":1},{"date":"2022-07-20","results":{"micah":4,"plan":131,"baptist-world-aid":1,"":5,"cbm":67,"caritas_embedded":1,"baptist-world-aid_embedded":2},"total":211},{"date":"2022-07-21","results":{"plan":31,"cbm":12,"act-for-peace":1,"baptist-world-aid":1,"baptist-world-aid_embedded":1,"tearfund_embedded":1},"total":47},{"date":"2022-07-22","results":{"plan":3,"caritas_embedded":2,"oxfam":130,"baptist-world-aid":3,"cbm":2,"save-the-children":1,"baptist-world-aid_embedded":1},"total":142},{"date":"2022-07-23","results":{"oxfam":38,"cbm":3,"baptist-world-aid":5,"plan":2},"total":48},{"date":"2022-07-24","results":{"oxfam":15,"plan":5,"":3,"cbm":2,"plan_embedded":1,"baptist-world-aid":1},"total":27},{"date":"2022-07-25","results":{"oxfam":6,"cbm":2,"plan":1},"total":9}],"totals":{"":9,"micah":4,"plan":173,"baptist-world-aid":11,"cbm":88,"caritas_embedded":3,"baptist-world-aid_embedded":4,"act-for-peace":1,"tearfund_embedded":1,"oxfam":189,"save-the-children":1,"plan_embedded":1},"count":485}
+
+            const dataPreviousRaw = {"next":0,"pages":[{"data":[{"date":"2022-07-19","results":{"":1},"total":1},{"date":"2022-07-20","results":{"micah":3,"plan":61,"baptist-world-aid":1,"":2,"cbm":31,"caritas_embedded":1},"total":99}],"count":485,"next":"2"},{"data":[{"date":"2022-07-20","results":{"cbm":30,"plan":65,"micah":1,"":3,"baptist-world-aid_embedded":1},"total":100}],"count":485,"next":"3"},{"data":[{"date":"2022-07-20","results":{"plan":5,"cbm":6,"baptist-world-aid_embedded":1},"total":12},{"date":"2022-07-21","results":{"plan":31,"cbm":12,"act-for-peace":1,"baptist-world-aid":1,"baptist-world-aid_embedded":1,"tearfund_embedded":1},"total":47},{"date":"2022-07-22","results":{"plan":3,"caritas_embedded":1,"oxfam":37},"total":41}],"count":485,"next":"4"},{"data":[{"date":"2022-07-22","results":{"oxfam":92,"baptist-world-aid":3,"cbm":2,"save-the-children":1,"caritas_embedded":1,"baptist-world-aid_embedded":1},"total":100}],"count":485,"next":"5"},{"data":[{"date":"2022-07-22","results":{"oxfam":1},"total":1},{"date":"2022-07-23","results":{"oxfam":38,"cbm":3,"baptist-world-aid":5,"plan":2},"total":48},{"date":"2022-07-24","results":{"oxfam":15,"plan":5,"":3,"cbm":2,"plan_embedded":1,"baptist-world-aid":1},"total":27},{"date":"2022-07-25","results":{"oxfam":6,"cbm":2,"plan":1},"total":9}],"count":485,"next":0}]}
+
+/**
+ * initial === raw
+ * dataPreviousRaw and previous is same minus yesterday and today.
+ */
+
+            const dataPrevious = {"next":0,"pages":[{"count":485,"next":"2","data":[{"date":"2022-07-19","results":{"":1},"total":1},{"date":"2022-07-20","results":{"micah":3,"plan":61,"baptist-world-aid":1,"":2,"cbm":31,"caritas_embedded":1},"total":99}]},{"count":485,"next":"3","data":[{"date":"2022-07-20","results":{"cbm":30,"plan":65,"micah":1,"":3,"baptist-world-aid_embedded":1},"total":100}]},{"count":485,"next":"4","data":[{"date":"2022-07-20","results":{"plan":5,"cbm":6,"baptist-world-aid_embedded":1},"total":12},{"date":"2022-07-21","results":{"plan":31,"cbm":12,"act-for-peace":1,"baptist-world-aid":1,"baptist-world-aid_embedded":1,"tearfund_embedded":1},"total":47},{"date":"2022-07-22","results":{"plan":3,"caritas_embedded":1,"oxfam":37},"total":41}]},{"count":485,"next":"5","data":[{"date":"2022-07-22","results":{"oxfam":92,"baptist-world-aid":3,"cbm":2,"save-the-children":1,"caritas_embedded":1,"baptist-world-aid_embedded":1},"total":100}]},{"count":485,"next":0,"data":[{"date":"2022-07-22","results":{"oxfam":1},"total":1},{"date":"2022-07-23","results":{"oxfam":38,"cbm":3,"baptist-world-aid":5,"plan":2},"total":48}]}]}
+            
+            const dataNewResponse = {"next":0,"pages":[{"count":485,"next":"2","data":[{"date":"2022-07-19","results":{"":1},"total":1},{"date":"2022-07-20","results":{"micah":3,"plan":61,"baptist-world-aid":1,"":2,"cbm":31,"caritas_embedded":1},"total":99}]},{"count":485,"next":"3","data":[{"date":"2022-07-20","results":{"cbm":30,"plan":65,"micah":1,"":3,"baptist-world-aid_embedded":1},"total":100}]},{"count":485,"next":"4","data":[{"date":"2022-07-20","results":{"plan":5,"cbm":6,"baptist-world-aid_embedded":1},"total":12},{"date":"2022-07-21","results":{"plan":31,"cbm":12,"act-for-peace":1,"baptist-world-aid":1,"baptist-world-aid_embedded":1,"tearfund_embedded":1},"total":47},{"date":"2022-07-22","results":{"plan":3,"caritas_embedded":1,"oxfam":37},"total":41}]},{"count":485,"next":"5","data":[{"date":"2022-07-22","results":{"oxfam":92,"baptist-world-aid":3,"cbm":2,"save-the-children":1,"caritas_embedded":1,"baptist-world-aid_embedded":1},"total":100}]},{"count":485,"next":0,"data":[{"date":"2022-07-22","results":{"oxfam":1},"total":1},{"date":"2022-07-23","results":{"oxfam":38,"cbm":3,"baptist-world-aid":5,"plan":2},"total":48}]},{"data":[{"date":"2022-07-24","results":{"":3,"plan":3,"oxfam":10,"cbm":2,"plan_embedded":1,"baptist-world-aid":1},"total":20},{"date":"2022-07-25","results":{"oxfam":6,"cbm":2,"plan":1},"total":9}],"count":29,"next":0}]}
+            const dataNewTotal = {"dates":["2022-07-19","2022-07-20","2022-07-21","2022-07-22","2022-07-23","2022-07-24","2022-07-25"],"dateTotals":[{"date":"2022-07-19","results":{"":1},"total":1},{"date":"2022-07-20","results":{"micah":4,"plan":131,"baptist-world-aid":1,"":5,"cbm":67,"caritas_embedded":1,"baptist-world-aid_embedded":2},"total":211},{"date":"2022-07-21","results":{"plan":31,"cbm":12,"act-for-peace":1,"baptist-world-aid":1,"baptist-world-aid_embedded":1,"tearfund_embedded":1},"total":47},{"date":"2022-07-22","results":{"plan":3,"caritas_embedded":2,"oxfam":130,"baptist-world-aid":3,"cbm":2,"save-the-children":1,"baptist-world-aid_embedded":1},"total":142},{"date":"2022-07-23","results":{"oxfam":38,"cbm":3,"baptist-world-aid":5,"plan":2},"total":48},{"date":"2022-07-24","results":{"":3,"plan":3,"oxfam":10,"cbm":2,"plan_embedded":1,"baptist-world-aid":1},"total":20},{"date":"2022-07-25","results":{"oxfam":6,"cbm":2,"plan":1},"total":9}],"totals":{"":9,"micah":4,"plan":171,"baptist-world-aid":11,"cbm":88,"caritas_embedded":3,"baptist-world-aid_embedded":4,"act-for-peace":1,"tearfund_embedded":1,"oxfam":184,"save-the-children":1,"plan_embedded":1},"count":29}
+
+
+            document.addEventListener('DOMContentLoaded', () => {
+              fillTable( processFinalData( JSON.parse(localStorage.getItem('hff')) ))
+            });
+        </script>
+
+<div>
+  <canvas id="chart" width="600" height="300" />
+</div>
+<button id="toggle" class="button upper-case" style="display: none;">Toggle chart</button>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="text/javascript">
+  // Chart JS 
+  let lineChart;
+  
+  function generateChartData() {
+    const lsData = JSON.parse(localStorage.getItem('hff_table'));
+
+    const labels = [];
+    const dataItems = [];
+    const dataItemsCumulative = [];
+
+    let runningTotal = 0;
+
+    if(!lsData) return { labels, dataItems, dataItemsCumulative };
+
+    lsData.dateTotals.forEach(item => {
+      runningTotal += item.total;
+
+      labels.push(item.date);
+      dataItems.push(item.total);
+      dataItemsCumulative.push(runningTotal);
+    });
+    
+    return { labels, dataItems, dataItemsCumulative }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const { labels, dataItems, dataItemsCumulative } = generateChartData();
+		const toggleEl = document.querySelector('#toggle');
+    let dataIsStandard = true;
+
+    let data = {
+      labels: labels,
+      datasets: [{
+        label: 'Total signatures',
+        data: dataItems,
+        fill: true,
+        borderColor: '#f59911',
+        backgroundColor : '#f5991109',
+        color: '#f59911',
+        tension: 0.1
+      }]
+    };
+
+    const config = {
+      type: 'line',
+      data: data,
+    };
+
+    lineChart = new Chart(
+      document.getElementById('chart'),
+      config
+    );
+    
+   if(dataItemsCumulative.length > 0) toggleEl.style.display = 'block';
+
+   toggleEl.addEventListener('click', (e) => {
+   		const { dataItems, dataItemsCumulative } = generateChartData();
+    
+      if(dataIsStandard) {
+        data.datasets[0].data = dataItemsCumulative
+        dataIsStandard = false
+
+      } else {
+        data.datasets[0].data = dataItems
+        dataIsStandard = true
+
+      }
+
+      return lineChart.update();
+    });
+  });
+    
+  window.addEventListener('storage', () => {
+    const { labels, dataItems } = generateChartData();
+    
+    let data = {
+      labels: labels,
+      datasets: [{
+        label: 'Total signatures',
+        data: dataItems,
+        fill: true,
+        borderColor: '#f59911',
+        backgroundColor : '#f5991109',
+        color: '#f59911',
+        tension: 0.1
+      }]
+    }
+    
+    lineChart.data = data;
+    
+		return lineChart.update();
+  });
+</script>
+    </body>
+</html>
