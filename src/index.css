@@ -100,7 +100,7 @@ a:hover {
 
 h1,h2,h3,h4,h5,h6 { font-family: var(--ff-headings); margin: 0 0 0.5em; }
 
-h1 { font-size: var(--fs-h1); }
+h1 { font-size: var(--fs-h1); line-height: 1.1; }
 h2 { font-size: var(--fs-h2); }
 h3 { font-size: var(--fs-h3); }
 h4 { font-size: var(--fs-h4); }
@@ -115,3 +115,13 @@ p, ul, ol, code {
 b { font-weight: 700;}
 
 
+@media screen and (max-width: 640px) {
+  :root {
+    --fs-h5 : 1.1rem;
+    --fs-h4 : 1.25rem;
+    --fs-h3 : 1.5rem;
+    --fs-h2 : 2.5rem;
+    --fs-h1 : 3rem;
+    --fs-h0 : 6rem;
+  }
+}

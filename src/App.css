@@ -71,7 +71,6 @@ header p {
   z-index: 1;
   max-width: 27rem;
   width: fit-content;
-  rotate: 3deg;
   text-shadow: 8px 4px 11px rgba(0,0,0,0.5);
 }
 /*
@@ -90,7 +89,7 @@ header p::after {
 */
 
 section.intro {
-  margin-inline: 4rem;
+  margin-inline: var(--xy-gutter);
   margin-block: 0rem 0rem;
   width: auto;
   overflow: hidden;
@@ -244,12 +243,13 @@ section.bottom a {
   background-color: var(--green);
   display: block;
   border-radius: 9rem;
-  padding: 3rem 6rem;
-  font-size: var(--fs-h2);
+  padding: 2rem 4rem;
+  font-size: var(--fs-h3);
   margin-top: 10vh;
   margin-bottom: 10vh;
   color: white;
   transition: all 150ms ease;
+  text-align: center;
 }
 section.bottom a:hover {
   rotate: -5deg;
@@ -271,4 +271,15 @@ section.bottom a:hover {
 }
 .responsiveness .bubble {
   rotate: -3deg;
+}
+
+
+@media screen and (max-width: 640px) {
+  section {
+    padding-block: 5vh;
+    padding-block: 5svh;
+  }
+  section.attributes div:first-child, section.responsiveness div:first-child {
+    margin-right: 0;
+  }
 }
