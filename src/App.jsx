@@ -6,6 +6,7 @@ import Section from './components/Section'
 import Col from './components/Col'
 import CodeBlock from './components/CodeBlock'
 import CodeXY from './components/CodeXY'
+import Marquee from "react-fast-marquee"
 /*
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faBroom, faSort, faPenToSquare, faTrashCan, faEye, faEyeSlash, faCheck, faArrowLeft, faImage, faLink, faHeading, faParagraph, faPlus } from '@fortawesome/free-solid-svg-icons'
@@ -21,77 +22,77 @@ function App() {
       <Header></Header>
       <Section xy="grid" classes="intro">
         <Col xy="col-12">
-          <div class="track">
-            <h2>Design in 12 columns</h2>
-            <h2 className="dev">Develop in 12 columns </h2>
-          </div>
-          <div className="track">
-            <h2 className="dev">Develop in 12 columns </h2>
-            <h2>Design in 12 columns</h2>
+          <div className="marquees">
+            <Marquee speed="110" gradient={false}>
+              <h2>Design in 12 columns ○</h2>
+              <h2 className="dev"> Develop in 12 columns ○</h2>
+            </Marquee>
+            <Marquee speed="70" gradient={false}>
+              <h2 className="dev"> Develop in 12 columns ○</h2>
+              <h2>Design in 12 columns ○</h2>
+            </Marquee>
           </div>
         </Col>
-        <Col xy="col-8">
+        <Col xy="2xl:8 xl:8 md:10 xs:12">
           <p>XD, Figma, whatever the tool, it uses a grid—probably a 12 column one. Developers don't. Often you spend years tweaking crap in QA. You need to work to a grid.
             </p>
             <p>Use Xylem. Keep it simple, get it right.</p>
         </Col>
-
       </Section>
-
       <Section classes="visual-grid" xy="block">
         <h3>12 column responsive grid.</h3>
         <div data-xy="grid">
-            <div data-xy="col"><p>1</p></div>
-            <div data-xy="col"><p>2</p></div>
-            <div data-xy="col"><p>3</p></div>
-            <div data-xy="col"><p>4</p></div>
-            <div data-xy="col"><p>5</p></div>
-            <div data-xy="col"><p>6</p></div>
-            <div data-xy="col"><p>7</p></div>
-            <div data-xy="col"><p>8</p></div>
-            <div data-xy="col"><p>9</p></div>
-            <div data-xy="col"><p>10</p></div>
-            <div data-xy="col"><p>11</p></div>
-            <div data-xy="col"><p>12</p></div>
+            <div data-xy="col 2xl:1 xl:1 lg:1 md:2 sm:3 xs:4"><p>1</p></div>
+            <div data-xy="col 2xl:1 xl:1 lg:1 md:2 sm:3 xs:4"><p>2</p></div>
+            <div data-xy="col 2xl:1 xl:1 lg:1 md:2 sm:3 xs:4"><p>3</p></div>
+            <div data-xy="col 2xl:1 xl:1 lg:1 md:2 sm:3 xs:4"><p>4</p></div>
+            <div data-xy="col 2xl:1 xl:1 lg:1 md:2 sm:3 xs:4"><p>5</p></div>
+            <div data-xy="col 2xl:1 xl:1 lg:1 md:2 sm:3 xs:4"><p>6</p></div>
+            <div data-xy="col 2xl:1 xl:1 lg:1 md:2 sm:3 xs:4"><p>7</p></div>
+            <div data-xy="col 2xl:1 xl:1 lg:1 md:2 sm:3 xs:4"><p>8</p></div>
+            <div data-xy="col 2xl:1 xl:1 lg:1 md:2 sm:3 xs:4"><p>9</p></div>
+            <div data-xy="col 2xl:1 xl:1 lg:1 md:2 sm:3 xs:4"><p>10</p></div>
+            <div data-xy="col 2xl:1 xl:1 lg:1 md:2 sm:3 xs:4"><p>11</p></div>
+            <div data-xy="col 2xl:1 xl:1 lg:1 md:2 sm:3 xs:4"><p>12</p></div>
         </div>
         <div data-xy="grid">
-            <div data-xy="col col-6">
+            <div data-xy="col 2xl:6 xl:6 md:12">
                 <p>This is a col 6</p>
             </div>
-            <div data-xy="col col-6">
+            <div data-xy="col 2xl:6 xl:6 md:12">
                 <p>This is a col 6</p>
             </div>
         </div>
         <div data-xy="grid">
-            <div data-xy="col col-4">
+            <div data-xy="col 2xl:4 xl:4 md:8 sm:12">
                 <p>This is a col 4</p>
             </div>
-            <div data-xy="col col-2">
+            <div data-xy="col 2xl:2 xl:2 md:4 sm:12">
                 <p>This is a col 2</p>
             </div>
-            <div data-xy="col col-6">
+            <div data-xy="col 2xl:6 xl:6 md:12">
                 <p>This is a col 6</p>
             </div>
         </div>
         <div data-xy="grid">
-            <div data-xy="col col-4">
+            <div data-xy="col 2xl:4 xl:4">
                 <p>This is a col 4</p>
             </div>
-            <div data-xy="col col-4">
+            <div data-xy="col 2xl:4 xl:4">
                 <p>This is a col 4</p>
             </div>
-            <div data-xy="col col-4">
+            <div data-xy="col 2xl:4 xl:4">
                 <p>This is a col 4</p>
             </div>
         </div>
       </Section>
 
       <Section classes="attributes" xy="grid items-center">
-        <Col xy="col-6">
-          <h3>The XY Attribute—Tailwind CSS Syntax</h3>
+        <Col xy="2xl:6 md:12" classes="bubble">
+          <h3>The XY Attribute—<br />Tailwind CSS Syntax</h3>
           <p>The syntax is very similar to Tailwind CSS. Add a <code>data-xy</code> attribute and add what you want and BAM grid time!</p>
         </Col>
-        <Col xy="col-6">
+        <Col xy="2xl:6 md:12">
           <CodeBlock>
             {`<div data-xy="grid has-gutter">
   <div data-xy="col col-4">This is a 4 column</div>
@@ -102,14 +103,14 @@ function App() {
       </Section>
 
       <Section classes="responsiveness" xy="grid items-center">
-        <Col xy="col-6">
+        <Col xy="2xl:6 md:12" classes="bubble">
           <h3>Responsive mode!</h3>
           <p>There are 6 different breakpoints: 
             <code>2xl:</code>, <code>xl:</code>, <code>lg:</code>, <code>md:</code>, 
             <code>sm:</code> and <code>xs:</code>.</p>
             <p>They cascade down. Append any property with the media key and bingo bango! Omit <em>cols</em> for col based media breaks</p>
         </Col>
-        <Col xy="col-6">
+        <Col xy="2xl:6 md:12">
           <CodeBlock>
               {`<div data-xy="grid has-gutter sm:flex sm:flex-column">
   <div data-xy="col 2xl:4 md:12 sm:auto">This is a 4 column, but on mobile its full width</div>
@@ -129,11 +130,11 @@ function App() {
           </Col>
         </Section>
         <Section classes="glossary" xy="grid items-center">
-          <Col xy="col-6">
+          <Col xy="2xl:6 md:12">
             <h3>Display Modes</h3>
             <p>Xylem's main focus is grid, but also supports flex and display</p>
           </Col>
-          <Col xy="col-6">
+          <Col xy="2xl:6 md:12">
             <CodeBlock>
                 {`<div data-xy="2xl:grid xl:grid lg:flex md:block sm:inline-block">
       Append media keys to change display mode too!
@@ -142,7 +143,7 @@ function App() {
           </Col>
         </Section>
         <Section classes="glossary alt" xy="grid items-center">
-          <Col xy="col-6">
+          <Col xy="2xl:6 md:12">
             <h3>The art of the Col</h3>
             <p><CodeXY>col</CodeXY> is the main dude of Xylem. Here are the options.</p>
             <ul>
@@ -155,7 +156,7 @@ function App() {
             </ul>
             <p>If shit is wonky, you probably missed the <CodeXY>col</CodeXY>.</p>
           </Col>
-          <Col xy="col-6">
+          <Col xy="2xl:6 md:12">
             <CodeBlock>
                 {`data-xy="grid 2xl:6 xl:6 md:8 sm:12 xs:auto"
   data-xy="grid col-12"
@@ -164,7 +165,7 @@ function App() {
           </Col>
         </Section>
         <Section classes="glossary" xy="grid items-center">
-          <Col xy="col-6">
+          <Col xy="2xl:6 md:12">
             <h3>Grid/Flex Alignment Options</h3>
             <p>Xylem uses custom CSS properties to do most of the heavy lifting. 
               Look at the code for a squiz. The codeblock aside demostrates some of the availible options.
@@ -179,7 +180,7 @@ function App() {
             </ul>
             <p>They all work responsively too.</p>
           </Col>
-          <Col xy="col-6">
+          <Col xy="2xl:6 md:12">
             <CodeBlock>
                 {`data-xy="grid justify-center" // justify-content: center;
 
@@ -196,7 +197,7 @@ function App() {
           </Col>
         </Section>
         <Section classes="glossary alt" xy="grid items-center">
-          <Col xy="col-6">
+          <Col xy="2xl:6 md:12">
             <h3>Feeling Flexy?</h3>
             <p>Here is what you can do with the specific flex options.
               </p>
@@ -206,7 +207,7 @@ function App() {
             </ul>
             <p>All the properties for <code>flex-direction</code> as as you would expect. They all work responsively too.</p>
           </Col>
-          <Col xy="col-6">
+          <Col xy="2xl:6 md:12">
             <CodeBlock>
                 {`data-xy="grid justify-center" // justify-content: center;
 
@@ -224,7 +225,7 @@ function App() {
         </Section>
       </div>
       <Section classes="bottom" xy="flex flex-column justify-center items-center">
-        <a href="/" download>Download and give it a go!</a>
+        <a href="/xylem.v2.css" download>Download and give it a go!</a>
       </Section>
       <Footer />
     </div>
