@@ -225,7 +225,7 @@ function App() {
         </Section>
       </div>
       <Section classes="bottom" xy="flex flex-column justify-center items-center">
-        <a href="/xylem.v2.css" download>Download and give it a go!</a>
+        <a href="https://github.com/BeechAgency/xylemcss" target="_blank">Download and give it a go!</a>
       </Section>
       <Footer />
     </div>
