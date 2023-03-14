@@ -406,6 +406,7 @@ section {
 
 
 @media screen and (max-width: 1536px) {
+    :root { --xy-padding-inline : 2rem; }
     /**
     * XL Screen Size
     */
@@ -710,6 +711,7 @@ section {
 
 
 @media screen and (max-width: 1024px) {
+    :root { --xy-padding-inline : 1.5rem; }
     /**
     * MD Screen Size
     */
@@ -862,6 +864,7 @@ section {
 
 
 @media screen and (max-width: 768px) {
+    :root { --xy-padding-inline : 2rem; }
     /**
     * SM Screen Size
     */
@@ -1013,6 +1016,7 @@ section {
 }
 
 @media screen and (max-width: 480px) {
+    :root { --xy-padding-inline : 1rem; }
     /**
     * xs Screen Size
     */
