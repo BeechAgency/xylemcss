@@ -1,0 +1,117 @@
+@import url("https://use.typekit.net/aof6zni.css");
+
+:root {
+  /* Fonts */
+  --ff-serif : 'Space Mono', monospace;
+  --ff-sans : Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --ff-mono : 'Space Mono', monospace;
+  --ff-new : "neue-haas-unica", sans-serif;
+  --ff-headings : var(--ff-new);
+  --ff-body : var(--ff-new);
+  --ff-highlight : var(--ff-new);
+
+	/* Type */
+	--base-font-size : clamp(16px, 1.1713vw, 1.1713vw);
+	--base-line-height : 1.75;
+	--fs-s3 : 0.422rem;
+	--fs-s2 : 0.563rem;
+	--fs-s1 : 0.75rem;
+	--fs-base : 1rem;
+	--fs-h5 : 1.333rem;
+	--fs-h4 : 1.25rem;
+	--fs-h3 : 1.95rem;
+	--fs-h2 : 3.157rem;
+	--fs-h1 : 4.209rem;
+	--fs-h0 : 6.209rem;
+
+	/* Colours */
+  --black : #000;
+  --white : #fff;
+  --green : #69B578;
+  --green-light: #8ec79a;
+  --green-dark: #56ac67;
+  --blue: #1E91D6;
+  --red : #ff5a5f;
+  --not-as-dark: #242424;
+  --dark : #101010;
+  --gray : #f5f5f5;
+  --yellow : #ffd275;
+
+  /* Mode Colors */
+  --body-bg: var(--dark);
+
+	/* Default */
+	--body-text-color: var(--white);
+	--body-bg-color: linear-gradient(#1f1f1f00, var(--dark));
+
+	/* Width */
+	--max-width : 1440px;
+	--max-width-content: 720px;
+
+	/* Shadow */
+	--shadow-subtle : 0px 0px 7px -4px rgba(0,0,0,0.5);
+
+  /* Padding */
+  --p1 : 0.25rem;
+  --p2 : 0.5rem;
+  --p3 : 1rem;
+  --p4 : 1.5rem;
+  --p5 : 2rem;
+  --p6 : 3rem;
+
+  font-family: var(--ff-body);
+  font-size: var(--base-font-size);
+  line-height: var(--base-line-height);
+  font-weight: 300;
+
+  color-scheme: light dark;
+  color: var(--white);
+  background-color: var(--not-as-dark);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+* { box-sizing: border-box; }
+
+html, body { 
+  padding: 0; margin: 0; border: 0; 
+
+}
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+  /*background: radial-gradient(ellipse at 100% 0%, var(--green-light) 0%, var(--green) 20%);*/
+}
+
+a {
+  font-weight: 500;
+  color: var(--yellow);
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+h1,h2,h3,h4,h5,h6 { font-family: var(--ff-headings); margin: 0 0 0.5em; }
+
+h1 { font-size: var(--fs-h1); }
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); }
+h4 { font-size: var(--fs-h4); }
+h5 { font-size: var(--fs-h5); }
+h6 { font-size: var(--fs-h6); }
+
+p, ul, ol, code {
+  font-size: var(--fs-base); 
+  margin: 0 0 0.5em;
+}
+
+b { font-weight: 700;}
+
+
